@@ -21,7 +21,13 @@ jobs:
       - name: Oracle must pass
         run: |
           "$HOME/.local/bin/harbor" run -p . --agent oracle
+          job_dir="$(dirname "$(find jobs -name result.json -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)")"
+          echo "=== Oracle verifier artifacts ==="
+          find "$job_dir" -type f \( -name reward.txt -o -name ctrf.json \) -print -exec cat {} \;
 
       - name: Nop must fail verification
         run: |
           "$HOME/.local/bin/harbor" run -p . --agent nop
+          job_dir="$(dirname "$(find jobs -name result.json -printf '%T@ %p\n' | sort -n | tail -1 | cut -d' ' -f2-)")"
+          echo "=== Nop verifier artifacts ==="
+          find "$job_dir" -type f \( -name reward.txt -o -name ctrf.json \) -print -exec cat {} \;
