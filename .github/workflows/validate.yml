@@ -19,7 +19,9 @@ jobs:
           "$HOME/.local/bin/harbor" --version
 
       - name: Oracle must pass
-        run: "$HOME/.local/bin/harbor" run -p . --agent oracle
+        run: |
+          "$HOME/.local/bin/harbor" run -p . --agent oracle
 
       - name: Nop must fail verification
-        run: "$HOME/.local/bin/harbor" run -p . --agent nop
+        run: |
+          "$HOME/.local/bin/harbor" run -p . --agent nop
