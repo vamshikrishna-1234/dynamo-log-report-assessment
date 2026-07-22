@@ -1,0 +1,25 @@
+name: Validate Harbor task
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Harbor
+        run: |
+          python -m pip install --disable-pip-version-check uv
+          python -m uv tool install harbor
+          "$HOME/.local/bin/harbor" --version
+
+      - name: Oracle must pass
+        run: "$HOME/.local/bin/harbor" run -p . --agent oracle
+
+      - name: Nop must fail verification
+        run: "$HOME/.local/bin/harbor" run -p . --agent nop
